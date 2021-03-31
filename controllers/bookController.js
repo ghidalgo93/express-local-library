@@ -200,7 +200,7 @@ exports.book_delete_get = function (req, res, next) {
       book(callback) {
         Book.findById(req.params.id).exec(callback);
       },
-      book_instances(callback) {
+      book_instance(callback) {
         BookInstance.find({ book: req.params.id }).exec(callback);
       },
     },
@@ -216,7 +216,7 @@ exports.book_delete_get = function (req, res, next) {
       res.render("book_delete", {
         title: "Delete Book",
         book: results.book,
-        book_instances: results.book_instances,
+        book_instances: results.book_instance,
       });
     }
   );
@@ -229,7 +229,7 @@ exports.book_delete_post = function (req, res, next) {
       book(callback) {
         Book.findById(req.body.bookid).exec(callback);
       },
-      book_instances(callback) {
+      book_instance(callback) {
         BookInstance.find({ book: req.body.bookid }).exec(callback);
       },
     },
@@ -252,7 +252,7 @@ exports.book_delete_post = function (req, res, next) {
             return next(err);
           }
           // Success - go to book list
-          res.redirect("catalog/books");
+          res.redirect("/catalog/books");
         });
       }
     }
