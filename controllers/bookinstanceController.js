@@ -96,7 +96,6 @@ exports.bookinstance_create_post = [
           bookinstance,
         });
       });
-      
     } else {
       // Data from form is valid.
       bookinstance.save((err) => {
@@ -111,13 +110,42 @@ exports.bookinstance_create_post = [
 ];
 
 // Display BookInstance delete form on GET.
-exports.bookinstance_delete_get = function (req, res) {
-  res.send("NOT IMPLEMENTED: BookInstance delete GET");
+exports.bookinstance_delete_get = function (req, res, next) {
+  BookInstance.findById(req.params.id)
+    .populate("book")
+    .exec((err, bookinstance) => {
+      if (err) {
+        return next(err);
+      }
+      if (bookinstance == null) {
+        // No results
+        res.redirect("/catalog/bookinstances");
+      }
+      // Successfu, so render
+      res.render("bookinstance_delete", {
+        title: "Delete Book Instance",
+        bookinstance,
+      });
+    });
 };
 
 // Handle BookInstance delete on POST.
-exports.bookinstance_delete_post = function (req, res) {
-  res.send("NOT IMPLEMENTED: BookInstance delete POST");
+exports.bookinstance_delete_post = function (req, res, next) {
+  BookInstance.findById(req.body.bookinstanceid)
+    .populate("book")
+    .exec((err, bookinstance) => {
+      if (err) {
+        return next(err);
+      }
+      // No dependent models. Delete object and redirect to the list of instances.
+      BookInstance.findByIdAndRemove(req.body.bookinstanceid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to the book instance list.
+        res.redirect("/catalog/bookinstances");
+      });
+    });
 };
 
 // Display BookInstance update form on GET.
