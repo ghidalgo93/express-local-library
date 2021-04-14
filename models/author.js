@@ -29,6 +29,20 @@ AuthorSchema.virtual("date_of_death_formatted").get(function () {
     : "";
 });
 
+// Virtual for author's birthdate formatted for forms
+AuthorSchema.virtual("date_of_birth_form").get(function () {
+  return this.date_of_birth
+    ? DateTime.fromJSDate(this.date_of_birth).toISODate()
+    : "";
+});
+
+// Virtual for author's deathdate formatted for forms
+AuthorSchema.virtual("date_of_death_form").get(function () {
+  return this.date_of_death
+    ? DateTime.fromJSDate(this.date_of_death).toISODate()
+    : "";
+});
+
 // Virtual for author's lifespan
 AuthorSchema.virtual("lifespan").get(function () {
   const birthdate = this.date_of_birth
