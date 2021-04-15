@@ -4,6 +4,9 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+const compression = require("compression");
+const helmet = require("helmet");
+const mongoose = require("mongoose");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const catalogRouter = require("./routes/catalog"); // Import routes for "catalog" area of site
@@ -11,7 +14,6 @@ const catalogRouter = require("./routes/catalog"); // Import routes for "catalog
 const app = express();
 
 // Set up mongoose connection
-const mongoose = require("mongoose");
 
 const mongoDB =
   "mongodb+srv://ghidalgo93:aEvPSGNaScZIUWZQykYTbUyS@cluster0.bnood.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -27,6 +29,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet()); // Use helmet to protect against well known vulnerabilities
+app.use(compression()); // Compress all routes
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
